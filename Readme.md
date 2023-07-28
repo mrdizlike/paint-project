@@ -11,4 +11,5 @@
         let PS = PaintSystem() //Create object of PaintSystem class
         let paintPanel = PaintPanel(frame: CGRect(x: 50, y: 150, width: 300, height: 100)) //Create panel with tools and options.
         PS.PPinit(canvas: canvas, mainView: self, paintPanel: paintPanel) //init your canvas
-        PS.PPcreatePanel(view: self.view, paintCentralSystem: PS.paintCentralSystem, paintPanel: paintPanel) //init your paintPanel```
+        PS.PPcreatePanel(view: self.view, paintCentralSystem: PS.paintCentralSystem, paintPanel: paintPanel) //init your paintPanel
+    ```
