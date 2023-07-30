@@ -20,6 +20,8 @@ class Brush: DrawProtocol {
     var maxSize: CGFloat = 68
     var opacity: Double = 1
     var color = UIColor.red
+    var brushType: BrushEnum = .Brush
+    var colorButtonIsHide = false
     
     var isFirst = true
     
@@ -85,26 +87,24 @@ class Brush: DrawProtocol {
         
         // Степень сглаживания между линиями
         dynamicBrushSize = lerp(start: previousSize, end: dynamicBrushSize, t: lerpFactor)
+
+        // Квадратичная линия безье
+        let midPoint = CGPoint(x: (newPoint.x + lastPoint!.x) / 2, y: (newPoint.y + lastPoint!.y) / 2)
         
-        if let prevPoint = lastPoint {
-            // Квадратичная линия безье
-            let midPoint = CGPoint(x: (newPoint.x + prevPoint.x) / 2, y: (newPoint.y + prevPoint.y) / 2)
-            
-            if Int(previousSize) != Int(dynamicBrushSize) {
-                bezierPath.path.addQuadCurve(to: midPoint, controlPoint: prevPoint)
-                initBezierPath()
-                bezierPath.path.move(to: prevPoint)
-                bezierPath.path.lineWidth = dynamicBrushSize
-                previousSize = dynamicBrushSize
-                
-                let lastIndex = view.linePaths.indices.last!
-                view.linePaths[lastIndex].lines.append(bezierPath)
-            }
-            
+        if Int(previousSize) != Int(dynamicBrushSize) {
+            bezierPath.path.addQuadCurve(to: midPoint, controlPoint: lastPoint!)
+            initBezierPath()
+            bezierPath.path.move(to: lastPoint!)
             bezierPath.path.lineWidth = dynamicBrushSize
-            bezierPath.path.addQuadCurve(to: midPoint, controlPoint: prevPoint)
+            previousSize = dynamicBrushSize
             
+            let lastIndex = view.linePaths.indices.last!
+            view.linePaths[lastIndex].lines.append(bezierPath)
         }
+        
+        bezierPath.path.lineWidth = dynamicBrushSize
+        bezierPath.path.addQuadCurve(to: midPoint, controlPoint: lastPoint!)
+        
         lastPoint = newPoint
         previousTimestamp = currentTimestamp
 

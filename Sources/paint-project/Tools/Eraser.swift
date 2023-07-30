@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 class Eraser: DrawProtocol {
-    
     var id = BrushEnum.Eraser
     var bezierPath: Line = Line(color: .red, path: UIBezierPath())
     var lastPoint: CGPoint?
@@ -21,6 +20,8 @@ class Eraser: DrawProtocol {
     var maxSize: CGFloat = 68
     var opacity: Double = 1
     var color = UIColor.red
+    var brushType: BrushEnum = .Eraser
+    var colorButtonIsHide = true
     
     var isFirst = true
     
@@ -46,11 +47,10 @@ class Eraser: DrawProtocol {
     
     func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
+
+        let midPoint = CGPoint(x: (newPoint.x + lastPoint!.x) / 2, y: (newPoint.y + lastPoint!.y) / 2)
+        bezierPath.path.addQuadCurve(to: midPoint, controlPoint: lastPoint!)
         
-        if let prevPoint = lastPoint {
-            let midPoint = CGPoint(x: (newPoint.x + prevPoint.x) / 2, y: (newPoint.y + prevPoint.y) / 2)
-            bezierPath.path.addQuadCurve(to: midPoint, controlPoint: prevPoint)
-        }
         lastPoint = newPoint
         
         view.setNeedsDisplay()

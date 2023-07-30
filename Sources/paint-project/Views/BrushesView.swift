@@ -9,13 +9,14 @@ import UIKit
 
 class BrushesView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var mainView: PaintCentralSystem!
-    var tools: Array = [BrushEnum.Pencil, BrushEnum.Brush, BrushEnum.Eraser,BrushEnum.Marker]
+    var tools: [DrawProtocol]!
     
     let tableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initBrushesView()
         tableView.frame = view.bounds
         tableView.delegate = self
         tableView.dataSource = self
@@ -29,46 +30,38 @@ class BrushesView: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let tool = mainView.mainTools[BrushEnum(rawValue: indexPath.row)!]
+        let tool = tools[indexPath.row]
         
-        cell.textLabel?.text = tool?.name
+        cell.textLabel?.text = tool.name
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tool = tools[indexPath.row]
-        buttonTapped(id: tool.rawValue)
+        buttonTapped(tool)
+    }
+    
+    //Создаем заготовленные инструменты
+    func initBrushesView() {
+        tools = [Pencil(CGFloat(mainView.brushSize), 1, mainView.colorPickerView.selectedColor),
+                 Brush(CGFloat(mainView.brushSize), 1, mainView.colorPickerView.selectedColor),
+                 Eraser(CGFloat(mainView.brushSize), 1, mainView.drawingFrameView.backgroundColor!),
+                 Marker(CGFloat(mainView.brushSize), 0.2, mainView.colorPickerView.selectedColor)
+        ]
     }
     
     //Выбираем нужный инструмент
-    func buttonTapped(id: Int) {
-        switch id {
-        case BrushEnum.Pencil.rawValue:
-            mainView.selectedBrush = mainView.mainTools[BrushEnum.Pencil]
-            mainView.selectedBrush.color = mainView.colorPickerView.selectedColor
-            mainView.selectedBrush.size = CGFloat(mainView.paintPanel.slider.value)
-            mainView.paintPanel.colorButton.isHidden = false
-            break
-        case BrushEnum.Brush.rawValue:
-            mainView.selectedBrush = mainView.mainTools[BrushEnum.Brush]
-            mainView.selectedBrush.color = mainView.colorPickerView.selectedColor
-            mainView.selectedBrush.size = CGFloat(mainView.paintPanel.slider.value)
-            mainView.paintPanel.colorButton.isHidden = false
-            break
-        case BrushEnum.Eraser.rawValue:
-            mainView.selectedBrush = mainView.mainTools[BrushEnum.Eraser]
-            mainView.selectedBrush.size = CGFloat(mainView.paintPanel.slider.value)
-            mainView.paintPanel.colorButton.isHidden = true
-            break
-        case BrushEnum.Marker.rawValue:
-            mainView.selectedBrush = mainView.mainTools[BrushEnum.Marker]
-            mainView.selectedBrush.color = mainView.colorPickerView.selectedColor.withAlphaComponent(mainView.selectedBrush.opacity)
-            mainView.selectedBrush.size = CGFloat(mainView.paintPanel.slider.value)
-            mainView.paintPanel.colorButton.isHidden = false
-            break
-        default: break
+    func buttonTapped(_ brush: DrawProtocol) {
+        mainView.selectedBrush = tools[brush.brushType.rawValue]
+        if brush.color != mainView.drawingFrameView.backgroundColor! {
+            mainView.selectedBrush.color = mainView.colorPickerView.selectedColor.withAlphaComponent(brush.opacity)
+        } else {
+            mainView.selectedBrush.color = brush.color
         }
+        mainView.selectedBrush.size = CGFloat(mainView.paintPanel.slider.value)
+        mainView.paintPanel.colorButton.isHidden = brush.colorButtonIsHide
+        
         dismiss(animated: true)
         mainView.paintPanel.chooseBrushButton.setImage(UIImage(systemName: mainView.selectedBrush.iconName), for: .normal)
     }

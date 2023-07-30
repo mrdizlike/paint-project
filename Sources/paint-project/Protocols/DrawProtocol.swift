@@ -18,6 +18,8 @@ protocol DrawProtocol {
     var maxSize: CGFloat { get set }
     var color: UIColor { get set }
     var opacity: Double { get set}
+    var brushType: BrushEnum { get }
+    var colorButtonIsHide: Bool { get set }
     
     func initBezierPath()
     func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView)

@@ -20,6 +20,8 @@ class Marker: DrawProtocol {
     var maxSize: CGFloat = 68
     var opacity: Double = 0.2
     var color = UIColor.red.withAlphaComponent(0.2)
+    var brushType: BrushEnum = .Marker
+    var colorButtonIsHide = false
     
     var isFirst = true
     
@@ -46,10 +48,9 @@ class Marker: DrawProtocol {
     func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
         
-        if let prevPoint = lastPoint {
-            let midPoint = CGPoint(x: (newPoint.x + prevPoint.x) / 2, y: (newPoint.y + prevPoint.y) / 2)
-            bezierPath.path.addQuadCurve(to: midPoint, controlPoint: prevPoint)
-        }
+        let midPoint = CGPoint(x: (newPoint.x + lastPoint!.x) / 2, y: (newPoint.y + lastPoint!.y) / 2)
+        bezierPath.path.addQuadCurve(to: midPoint, controlPoint: lastPoint!)
+        
         lastPoint = newPoint
         
         view.setNeedsDisplay()

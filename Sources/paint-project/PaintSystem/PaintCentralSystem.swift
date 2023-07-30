@@ -7,8 +7,6 @@ public class PaintCentralSystem {
     
     var mainView: UIViewController!
     var selectedBrush: DrawProtocol!
-    var brushesEnum: BrushEnum!
-    var mainTools: Dictionary<BrushEnum, DrawProtocol> = [:]
     var colorPickerView: ColorPickerView!
     var brushPickerView: BrushesView!
     var drawingFrameView: DrawingView!
@@ -16,7 +14,19 @@ public class PaintCentralSystem {
     
     var brushSize: Float = 34.0
     
-    public init() {
+    public init(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
+        drawingFrameView = canvas
+        self.mainView = mainView
+        selectedBrush = Pencil(34, 1)
+        colorPickerView = ColorPickerView()
+        brushPickerView = BrushesView()
+        self.paintPanel = paintPanel
+        colorPickerView.mainView = self
+        brushPickerView.mainView = self
+        drawingFrameView.mainView = self
+        drawingFrameView.image = UIImageView(frame: drawingFrameView.frame)
+        drawingFrameView.addSubview(drawingFrameView.image)
+        self.paintPanel.chooseBrushButton.setImage(UIImage(systemName: selectedBrush.iconName), for: .normal)
     }
     
     // Слайдер размера кисти
@@ -27,7 +37,8 @@ public class PaintCentralSystem {
         
     }
     
-    @objc func colorButtonTap() { //Открываем или закрываем вьюшку с выбором цвета. Делаю кастомный ColorPicker, потому что эппловский появился только в iOS 14
+    //Открываем или закрываем вьюшку с выбором цвета. Делаю кастомный ColorPicker, потому что эппловский появился только в iOS 14
+    @objc func colorButtonTap() {
         mainView.present(colorPickerView, animated: true)
     }
     
@@ -55,7 +66,6 @@ public class PaintCentralSystem {
     
     //Очищаем экран
     @objc func cleanButtonTap() {
-        
         history.redoStack.removeAll()
         drawingFrameView.linePaths.removeAll()
         paintPanel.undoButton.isEnabled = false
@@ -76,33 +86,5 @@ public class PaintCentralSystem {
     //Открываем вьюшку с выбором инструмента
     @objc func selectTypeBrush() {
         mainView.present(brushPickerView, animated: true)
-    }
-    
-    //Создаем заготовленные инструменты
-    func initBrushesView() {
-        mainTools[BrushEnum.Pencil] = Pencil(CGFloat(brushSize), 1, colorPickerView.selectedColor)
-        
-        mainTools[BrushEnum.Brush] = Brush( CGFloat(brushSize),  1, colorPickerView.selectedColor)
-        
-        mainTools[BrushEnum.Eraser] = Eraser(CGFloat(brushSize), 1, drawingFrameView.backgroundColor!)
-        
-        mainTools[BrushEnum.Marker] = Marker( CGFloat(brushSize), 0.2, colorPickerView.selectedColor.withAlphaComponent(0.2))
-    }
-    
-    //Иницилизируем систему
-    func initPaintSystem(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
-        drawingFrameView = canvas
-        self.mainView = mainView
-        selectedBrush = Pencil(34, 1)
-        colorPickerView = ColorPickerView()
-        brushPickerView = BrushesView()
-        self.paintPanel = paintPanel
-        colorPickerView.mainView = self
-        brushPickerView.mainView = self
-        drawingFrameView.mainView = self
-        drawingFrameView.image = UIImageView(frame: drawingFrameView.frame)
-        drawingFrameView.addSubview(drawingFrameView.image)
-        self.paintPanel.chooseBrushButton.setImage(UIImage(systemName: selectedBrush.iconName), for: .normal)
-        initBrushesView()
     }
 }

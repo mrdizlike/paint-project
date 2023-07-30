@@ -24,6 +24,53 @@ class ColorPickerView: UIViewController {
         
     }
     
+    func createColorButton(color: UIColor, position: CGPoint) -> UIButton {
+        let buttonSize = CGSize(width: 50, height: 50)
+        
+        let button = UIButton(type: .system)
+        button.frame = CGRect(origin: position, size: buttonSize)
+        button.layer.borderWidth = 2.0
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.backgroundColor = color
+        button.layer.cornerRadius = buttonSize.width / 2
+        button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        
+        return button
+    }
+    
+    @objc func colorButtonTapped(_ sender: UIButton) {
+        var selectedOption: ColorsEnum
+        
+        switch sender {
+        case colorButtons[0]:
+            selectedOption = .red
+        case colorButtons[1]:
+            selectedOption = .blue
+        case colorButtons[2]:
+            selectedOption = .yellow
+        case colorButtons[3]:
+            selectedOption = .green
+        default:
+            selectedOption = .custom
+        }
+        
+        switch selectedOption {
+        case .custom:
+            selectedColor = chooseCustomColorButton.backgroundColor!
+        case .red:
+            selectedColor = .systemRed
+        case .blue:
+            selectedColor = .systemBlue
+        case .yellow:
+            selectedColor = .systemYellow
+        case .green:
+            selectedColor = .systemGreen
+        }
+        
+        updateButtonState()
+    }
+    
     @objc func sliderValueChanged() {
         let red = CGFloat(rSlider.value)
         let green = CGFloat(gSlider.value)
@@ -37,31 +84,7 @@ class ColorPickerView: UIViewController {
         selectedColor = chooseCustomColorButton.backgroundColor!
         updateButtonState()
     }
-    
-    //Выбираем красный цвет
-    @objc func chooseRedColor() {
-        selectedColor = .systemRed
-        updateButtonState()
-    }
-    
-    //Выбираем синий цвет
-    @objc func chooseBlueColor() {
-        selectedColor = .systemBlue
-        updateButtonState()
-    }
-    
-    //Выбираем желтый цвет
-    @objc func chooseYellowColor() {
-        selectedColor = .systemYellow
-        updateButtonState()
-    }
-    
-    //Выбираем зеленый цвет
-    @objc func chooseGreenColor() {
-        selectedColor = .systemGreen
-        updateButtonState()
-    }
-    
+
     //Обновляем вид интерфейса под соответсвующий контекст
     func updateButtonState() {
         mainView.selectedBrush.color = selectedColor.withAlphaComponent(mainView.selectedBrush.opacity)
@@ -82,45 +105,12 @@ class ColorPickerView: UIViewController {
         let buttonSpacing: CGFloat = 20
         let initialButtonX = (view.bounds.width - CGFloat(4) * (buttonSize.width + buttonSpacing)) / 2
         
-        // Красный цвет
-        let redButton = UIButton(type: .system)
-        redButton.frame = CGRect(origin: CGPoint(x: initialButtonX, y: titleLabel.frame.maxY + 20), size: buttonSize)
-        redButton.layer.borderWidth = 2.0
-        redButton.layer.borderColor = UIColor.lightGray.cgColor
-        redButton.backgroundColor = .red
-        redButton.layer.cornerRadius = buttonSize.width / 2
-        redButton.addTarget(self, action: #selector(chooseRedColor), for: .touchUpInside)
-        view.addSubview(redButton)
-        
-        // Синий цвет
-        let blueButton = UIButton(type: .system)
-        blueButton.frame = CGRect(origin: CGPoint(x: initialButtonX + buttonSize.width + buttonSpacing, y: titleLabel.frame.maxY + 20), size: buttonSize)
-        blueButton.layer.borderWidth = 2.0
-        blueButton.layer.borderColor = UIColor.lightGray.cgColor
-        blueButton.backgroundColor = .blue
-        blueButton.layer.cornerRadius = buttonSize.width / 2
-        blueButton.addTarget(self, action: #selector(chooseBlueColor), for: .touchUpInside)
-        view.addSubview(blueButton)
-        
-        // Желтый цвет
-        let yellowButton = UIButton(type: .system)
-        yellowButton.frame = CGRect(origin: CGPoint(x: initialButtonX + 2 * (buttonSize.width + buttonSpacing), y: titleLabel.frame.maxY + 20), size: buttonSize)
-        yellowButton.layer.borderWidth = 2.0
-        yellowButton.layer.borderColor = UIColor.lightGray.cgColor
-        yellowButton.backgroundColor = .yellow
-        yellowButton.layer.cornerRadius = buttonSize.width / 2
-        yellowButton.addTarget(self, action: #selector(chooseYellowColor), for: .touchUpInside)
-        view.addSubview(yellowButton)
-        
-        // Зеленый цвет
-        let greenButton = UIButton(type: .system)
-        greenButton.frame = CGRect(origin: CGPoint(x: initialButtonX + 3 * (buttonSize.width + buttonSpacing), y: titleLabel.frame.maxY + 20), size: buttonSize)
-        greenButton.layer.borderWidth = 2.0
-        greenButton.layer.borderColor = UIColor.lightGray.cgColor
-        greenButton.backgroundColor = .green
-        greenButton.layer.cornerRadius = buttonSize.width / 2
-        greenButton.addTarget(self, action: #selector(chooseGreenColor), for: .touchUpInside)
-        view.addSubview(greenButton)
+        // Кнопки с выбором цвета
+        colorButtons = []
+        colorButtons.append(createColorButton(color: .red, position: CGPoint(x: initialButtonX, y: titleLabel.frame.maxY + 20)))
+        colorButtons.append(createColorButton(color: .blue, position: CGPoint(x: initialButtonX + buttonSize.width + buttonSpacing, y: titleLabel.frame.maxY + 20)))
+        colorButtons.append(createColorButton(color: .yellow, position: CGPoint(x: initialButtonX + 2 * (buttonSize.width + buttonSpacing), y: titleLabel.frame.maxY + 20)))
+        colorButtons.append(createColorButton(color: .green, position: CGPoint(x: initialButtonX + 3 * (buttonSize.width + buttonSpacing), y: titleLabel.frame.maxY + 20)))
         
         // Your Color
         let customColorLabel = UILabel(frame: CGRect(x: 20, y: 230, width: view.bounds.width - 40, height: 30))

@@ -1,7 +1,7 @@
 import UIKit
 
 public class PaintSystem {
-    public var paintCentralSystem = PaintCentralSystem()
+    public var paintCentralSystem: PaintCentralSystem!
     
     var brushView = UIViewController()
     var colorView = UIViewController()
@@ -21,6 +21,6 @@ public class PaintSystem {
     }
     
     public func PPinit(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
-        paintCentralSystem.initPaintSystem(canvas: canvas, mainView: mainView, paintPanel: paintPanel)
+        paintCentralSystem = PaintCentralSystem.init(canvas: canvas, mainView: mainView, paintPanel: paintPanel)
     }
 }

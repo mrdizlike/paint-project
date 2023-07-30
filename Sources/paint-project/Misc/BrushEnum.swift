@@ -8,7 +8,7 @@
 import Foundation
 
 enum BrushEnum: Int {
-    case Pencil
+    case Pencil = 0
     case Brush
     case Eraser
     case Marker
