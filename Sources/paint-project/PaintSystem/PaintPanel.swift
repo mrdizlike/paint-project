@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Виктор on 28.07.2023.
-//
-
 import UIKit
 
 public class PaintPanel: UIView {
@@ -15,6 +8,7 @@ public class PaintPanel: UIView {
     let colorButton = UIButton(type: .system)
     let cleanButton = UIButton(type: .system)
     let brushWidthSizeLabel = UILabel()
+    let brushWidthLabel = UILabel()
     let slider = UISlider()
     
     override public init(frame: CGRect) {
@@ -65,7 +59,7 @@ public class PaintPanel: UIView {
         cleanButton.setTitle("Clear All", for: .normal)
         self.addSubview(cleanButton)
         
-        let brushWidthLabel = UILabel(frame: CGRect(x: 10, y: 58, width: 100, height: 20))
+        brushWidthLabel.frame = CGRect(x: 10, y: 58, width: 100, height: 20)
         brushWidthLabel.text = "Weigth"
         self.addSubview(brushWidthLabel)
         

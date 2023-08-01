@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Виктор on 28.07.2023.
-//
-
 import UIKit
 
 class BrushesView: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -53,7 +46,7 @@ class BrushesView: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     //Выбираем нужный инструмент
     func buttonTapped(_ brush: DrawProtocol) {
-        mainView.selectedBrush = tools[brush.brushType.rawValue]
+        mainView.selectedBrush = tools[brush.id.rawValue]
         if brush.color != mainView.drawingFrameView.backgroundColor! {
             mainView.selectedBrush.color = mainView.colorPickerView.selectedColor.withAlphaComponent(brush.opacity)
         } else {

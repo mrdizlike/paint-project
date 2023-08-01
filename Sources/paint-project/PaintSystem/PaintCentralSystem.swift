@@ -14,10 +14,10 @@ public class PaintCentralSystem {
     
     var brushSize: Float = 34.0
     
+    //Инициализация системы
     public init(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
         drawingFrameView = canvas
         self.mainView = mainView
-        selectedBrush = Pencil(34, 1)
         colorPickerView = ColorPickerView()
         brushPickerView = BrushesView()
         self.paintPanel = paintPanel
@@ -26,7 +26,6 @@ public class PaintCentralSystem {
         drawingFrameView.mainView = self
         drawingFrameView.image = UIImageView(frame: drawingFrameView.frame)
         drawingFrameView.addSubview(drawingFrameView.image)
-        self.paintPanel.chooseBrushButton.setImage(UIImage(systemName: selectedBrush.iconName), for: .normal)
     }
     
     // Слайдер размера кисти

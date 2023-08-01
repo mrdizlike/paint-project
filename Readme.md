@@ -6,10 +6,28 @@
 
 ## Usage
 ```swift
-    @IBOutlet weak var canvas: DrawingView! // Your UIView with DrawingView class
+        //Create your canvas
+    private lazy var paintView: DrawingView = {
+        $0.backgroundColor = .gray
+        $0.uiDelegate = self
+        $0.showToolPanel = false
+        return $0
+    }(DrawingView())
     
-    let PS = PaintSystem() //Create object of PaintSystem class
-    let paintPanel = PaintPanel(frame: CGRect(x: 50, y: 150, width: 300, height: 100)) //Create panel with tools and options.
-    PS.PPinit(canvas: canvas, mainView: self, paintPanel: paintPanel) //init your canvas
-    PS.PPcreatePanel(view: self.view, paintCentralSystem: PS.paintCentralSystem, paintPanel: paintPanel) //init your paintPanel
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    
+        view.addSubview(paintView) //Add paintView to your view
+        paintView.initPaintSystem() //Init system
+    }
+    
+    //Delegate for init
+    extension ViewController: DrawingViewDelegate {
+        func presentViewController() -> UIViewController {
+            return self
+        }
+    
+        func rectForToolPanel() -> CGRect {
+            return CGRect(x: 50, y: 150, width: 300, height: 100)
+        }
 ```

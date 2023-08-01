@@ -1,13 +1,7 @@
-//
-//  File.swift
-//  
-//
-//  Created by Виктор on 28.07.2023.
-//
 import Foundation
 import UIKit
 
-protocol DrawProtocol {
+public protocol DrawProtocol {
     var id: BrushEnum { get set }
     var bezierPath: Line { get }
     
@@ -18,7 +12,6 @@ protocol DrawProtocol {
     var maxSize: CGFloat { get set }
     var color: UIColor { get set }
     var opacity: Double { get set}
-    var brushType: BrushEnum { get }
     var colorButtonIsHide: Bool { get set }
     
     func initBezierPath()

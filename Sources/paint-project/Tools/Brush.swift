@@ -1,27 +1,19 @@
-//
-//  File.swift
-//  
-//
-//  Created by Виктор on 28.07.2023.
-//
-
 import Foundation
 import UIKit
 
-class Brush: DrawProtocol {
-    var id = BrushEnum.Brush
-    var bezierPath: Line = Line(color: .red, path: UIBezierPath())
+public class Brush: DrawProtocol {
+    public var id = BrushEnum.Brush
+    public var bezierPath: Line = Line(color: .red, path: UIBezierPath())
     var lastPoint: CGPoint?
     
-    let iconName = "paintbrush"
-    let name = "Brush"
-    var size: CGFloat = 34
-    var minSize: CGFloat = 1.0
-    var maxSize: CGFloat = 68
-    var opacity: Double = 1
-    var color = UIColor.red
-    var brushType: BrushEnum = .Brush
-    var colorButtonIsHide = false
+    public let iconName = "paintbrush"
+    public let name = "Brush"
+    public var size: CGFloat = 34
+    public var minSize: CGFloat = 1.0
+    public var maxSize: CGFloat = 68
+    public var opacity: Double = 1
+    public var color = UIColor.red
+    public var colorButtonIsHide = false
     
     var isFirst = true
     
@@ -31,20 +23,20 @@ class Brush: DrawProtocol {
     var previousTimestamp: TimeInterval?
     var previousSize: CGFloat = 0
     
-    init(_ size: CGFloat, _ opacity: Double, _ color: UIColor = UIColor.red) {
+    public init(_ size: CGFloat, _ opacity: Double, _ color: UIColor = UIColor.red) {
         self.size = size
         self.opacity = opacity
         self.color = color
     }
     
-    func initBezierPath() {
+    public func initBezierPath() {
         bezierPath = Line(color: color, path: UIBezierPath())
         bezierPath.path.lineWidth = size
         bezierPath.path.lineCapStyle = CGLineCap.round
         bezierPath.path.lineJoinStyle = CGLineJoin.round
     }
     
-    func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
+    public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
         maxSize = size
         minSize = maxSize / 2
@@ -62,7 +54,7 @@ class Brush: DrawProtocol {
     }
     
     
-    func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
+    public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let touch: AnyObject? = touches.first
         let newPoint = touch!.location(in: view)
         
@@ -112,7 +104,7 @@ class Brush: DrawProtocol {
     }
     
     
-    func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
+    public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
         bezierPath.path.addLine(to: newPoint)
         view.setNeedsDisplay()

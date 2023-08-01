@@ -16,7 +16,20 @@ public class PaintSystem {
         paintPanel.colorButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.colorButtonTap), for: .touchUpInside)
         paintPanel.cleanButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.cleanButtonTap), for: .touchUpInside)
         paintPanel.slider.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.sizeSliderValueChanged), for: .allTouchEvents)
-        paintPanel.chooseBrushButton.setImage(UIImage(systemName: paintCentralSystem.selectedBrush.iconName), for: .normal)
+        view.addSubview(paintPanel)
+    }
+    
+    public func PPhidedPanel(view: UIView,paintCentralSystem: PaintCentralSystem, paintPanel: PaintPanel) {
+        paintPanel.slider.isHidden = true
+        paintPanel.chooseBrushButton.isHidden = true
+        paintPanel.colorButton.isHidden = true
+        paintPanel.brushWidthSizeLabel.isHidden = true
+        paintPanel.brushWidthLabel.isHidden = true
+        paintPanel.layer.cornerRadius = 10
+        paintPanel.undoButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.undoButtonTap), for: .touchUpInside)
+        paintPanel.redoButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.redoButtonTap), for: .touchUpInside)
+        paintPanel.saveButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.saveButtonTap), for: .touchUpInside)
+        paintPanel.cleanButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.cleanButtonTap), for: .touchUpInside)
         view.addSubview(paintPanel)
     }
     

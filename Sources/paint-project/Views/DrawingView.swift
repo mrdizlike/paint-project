@@ -1,16 +1,15 @@
-//
-//  File.swift
-//  
-//
-//  Created by Виктор on 28.07.2023.
-//
-
 import Foundation
 import UIKit
 
 public class DrawingView: UIView {
     var history: History! = nil
     var mainView: PaintCentralSystem!
+    var paintSystem: PaintSystem!
+    var paintPanel: PaintPanel!
+    
+    public var uiDelegate: DrawingViewDelegate? //Делегат вьюшки
+    public var showToolPanel = false //Нужна ли нам панель инструментов
+    public var tool: DrawProtocol = Pencil(34, 1, .red) //Инструмент который будет по дефолту
     
     var linePaths: [LineSet] = []
     var image: UIImageView!
@@ -43,6 +42,23 @@ public class DrawingView: UIView {
         
         mainView.selectedBrush.touchesEnded(touches, with: event, self)
         print(linePaths.count)
+    }
+    
+    //Инициализация системы
+    public func initPaintSystem() {
+        frame = uiDelegate!.presentViewController().view.bounds
+        paintSystem = PaintSystem()
+        if showToolPanel {
+            paintPanel = PaintPanel(frame: uiDelegate!.rectForToolPanel())
+            paintSystem.PPinit(canvas: self, mainView: uiDelegate!.presentViewController(), paintPanel: paintPanel)
+            paintSystem.PPcreatePanel(view: self, paintCentralSystem: paintSystem.paintCentralSystem, paintPanel: paintPanel)
+        } else {
+            paintPanel = PaintPanel(frame: CGRect(x: 50, y: 50, width: 300, height: 30))
+            paintSystem.PPinit(canvas: self, mainView: uiDelegate!.presentViewController(), paintPanel: paintPanel)
+            paintSystem.PPhidedPanel(view: self, paintCentralSystem: paintSystem.paintCentralSystem, paintPanel: paintPanel)
+        }
+        mainView.selectedBrush = tool
+        mainView.paintPanel.chooseBrushButton.setImage(UIImage(systemName: mainView.selectedBrush.iconName), for: .normal)
     }
     
     //Отображаем изображение на UIImage

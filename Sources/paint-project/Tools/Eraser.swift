@@ -1,51 +1,43 @@
-//
-//  File.swift
-//  
-//
-//  Created by Виктор on 28.07.2023.
-//
-
 import Foundation
 import UIKit
 
-class Eraser: DrawProtocol {
-    var id = BrushEnum.Eraser
-    var bezierPath: Line = Line(color: .red, path: UIBezierPath())
+public class Eraser: DrawProtocol {
+    public var id = BrushEnum.Eraser
+    public var bezierPath: Line = Line(color: .red, path: UIBezierPath())
     var lastPoint: CGPoint?
     
-    let iconName = "eraser"
-    let name = "Eraser"
-    var size: CGFloat = 34
-    var minSize: CGFloat = 1.0
-    var maxSize: CGFloat = 68
-    var opacity: Double = 1
-    var color = UIColor.red
-    var brushType: BrushEnum = .Eraser
-    var colorButtonIsHide = true
+    public let iconName = "eraser"
+    public let name = "Eraser"
+    public var size: CGFloat = 34
+    public var minSize: CGFloat = 1.0
+    public var maxSize: CGFloat = 68
+    public var opacity: Double = 1
+    public var color = UIColor.red
+    public var colorButtonIsHide = true
     
     var isFirst = true
     
-    init(_ size: CGFloat, _ opacity: Double, _ color: UIColor = UIColor.red) {
+    public init(_ size: CGFloat, _ opacity: Double, _ color: UIColor = UIColor.red) {
         self.size = size
         self.opacity = opacity
         self.color = color
     }
     
-    func initBezierPath() {
+    public func initBezierPath() {
         bezierPath = Line(color: color, path: UIBezierPath())
         bezierPath.path.lineWidth = size
         bezierPath.path.lineCapStyle = CGLineCap.round
         bezierPath.path.lineJoinStyle = CGLineJoin.round
     }
     
-    func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
+    public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
         initBezierPath()
         bezierPath.path.move(to: newPoint)
         lastPoint = newPoint
     }
     
-    func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
+    public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
 
         let midPoint = CGPoint(x: (newPoint.x + lastPoint!.x) / 2, y: (newPoint.y + lastPoint!.y) / 2)
@@ -56,7 +48,7 @@ class Eraser: DrawProtocol {
         view.setNeedsDisplay()
     }
     
-    func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
+    public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?, _ view: DrawingView) {
         let newPoint = touches.first!.location(in: view)
         bezierPath.path.addLine(to: newPoint)
         view.setNeedsDisplay()
