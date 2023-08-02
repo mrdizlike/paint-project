@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class History {
+public class History {
     var undoStack = [LineSet]()
     var redoStack = [LineSet]()
     

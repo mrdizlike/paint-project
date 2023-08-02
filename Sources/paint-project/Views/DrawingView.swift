@@ -18,7 +18,6 @@ public class DrawingView: UIView {
     //Отрисовка
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
-        history = mainView.history
         
         render()
         undoRedo()
@@ -55,10 +54,26 @@ public class DrawingView: UIView {
         } else {
             paintPanel = PaintPanel(frame: CGRect(x: 50, y: 50, width: 300, height: 30))
             paintSystem.PPinit(canvas: self, mainView: uiDelegate!.presentViewController(), paintPanel: paintPanel)
-            paintSystem.PPhidedPanel(view: self, paintCentralSystem: paintSystem.paintCentralSystem, paintPanel: paintPanel)
         }
         mainView.selectedBrush = tool
+        history = mainView.history
         mainView.paintPanel.chooseBrushButton.setImage(UIImage(systemName: mainView.selectedBrush.iconName), for: .normal)
+    }
+    
+    public func undo() {
+        mainView.undoButtonTap()
+    }
+    
+    public func redo() {
+        mainView.redoButtonTap()
+    }
+    
+    public func clean() {
+        mainView.cleanButtonTap()
+    }
+    
+    public func save() {
+        mainView.saveButtonTap()
     }
     
     //Отображаем изображение на UIImage
