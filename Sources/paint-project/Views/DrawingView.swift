@@ -7,7 +7,14 @@ public class DrawingView: UIView {
     var paintSystem: PaintSystem!
     var paintPanel: PaintPanel!
     
-    public var uiDelegate: DrawingViewDelegate? //Делегат вьюшки
+    public var uiDelegate: DrawingViewDelegate? { //делегат
+        didSet {
+            if uiDelegate != nil { //если делегат установлен, инициализируем бизнес-логику
+                initPaintSystem()
+            }
+        }
+    }
+    
     public var showToolPanel = false //Нужна ли нам панель инструментов
     public var tool: DrawProtocol = Pencil(34, 1, .red) //Инструмент который будет по дефолту
     
@@ -45,7 +52,7 @@ public class DrawingView: UIView {
     
     //Инициализация системы
     public func initPaintSystem() {
-        frame = uiDelegate!.presentViewController().view.bounds
+        frame = uiDelegate!.presentViewController().view.bounds //фрейм по умолчанию, если не был установлен пользователем
         paintSystem = PaintSystem()
         if showToolPanel {
             paintPanel = PaintPanel(frame: uiDelegate!.rectForToolPanel())
@@ -60,20 +67,45 @@ public class DrawingView: UIView {
         mainView.paintPanel.chooseBrushButton.setImage(UIImage(systemName: mainView.selectedBrush.iconName), for: .normal)
     }
     
+    public func setRect(rect: CGRect) {
+        if uiDelegate != nil {
+            frame = rect
+            image.frame = rect
+        } else {
+            print("uiDelegate not found!")
+        }
+    }
+    
     public func undo() {
-        mainView.undoButtonTap()
+        if uiDelegate != nil {
+            mainView.undoButtonTap()
+        } else {
+            print("uiDelegate not found!")
+        }
     }
     
     public func redo() {
-        mainView.redoButtonTap()
+        if uiDelegate != nil {
+            mainView.redoButtonTap()
+        } else {
+            print("uiDelegate not found!")
+        }
     }
     
     public func clean() {
-        mainView.cleanButtonTap()
+        if uiDelegate != nil {
+            mainView.cleanButtonTap()
+        } else {
+            print("uiDelegate not found!")
+        }
     }
     
     public func save() {
-        mainView.saveButtonTap()
+        if uiDelegate != nil {
+            mainView.saveButtonTap()
+        } else {
+            print("uiDelegate not found!")
+        }
     }
     
     //Отображаем изображение на UIImage
