@@ -1,6 +1,6 @@
 import UIKit
 
-public class PaintPanel: UIView {
+class PaintPanel: UIView {
     let undoButton = UIButton(type: .system)
     let redoButton = UIButton(type: .system)
     let saveButton = UIButton(type: .system)
@@ -11,7 +11,7 @@ public class PaintPanel: UIView {
     let brushWidthLabel = UILabel()
     let slider = UISlider()
     
-    override public init(frame: CGRect) {
+    override init(frame: CGRect) {
         let customFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: 300, height: 100)
         let widthRatio = customFrame.width / 300
         let heightRatio = customFrame.height / 100

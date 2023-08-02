@@ -1,7 +1,7 @@
 import UIKit
 import CoreGraphics
 
-public class PaintCentralSystem {
+class PaintCentralSystem {
     let history = History()
     let numberFormatter = NumberFormatter()
     
@@ -15,7 +15,7 @@ public class PaintCentralSystem {
     var brushSize: Float = 34.0
     
     //Инициализация системы
-    public init(canvas: DrawingView, paintPanel: PaintPanel) {
+    init(canvas: DrawingView, paintPanel: PaintPanel) {
         drawingFrameView = canvas
         colorPickerView = ColorPickerView()
         brushPickerView = BrushesView()

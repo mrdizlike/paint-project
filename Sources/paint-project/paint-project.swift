@@ -1,14 +1,14 @@
 import UIKit
 
-public class PaintSystem {
+class PaintSystem {
     public var paintCentralSystem: PaintCentralSystem!
     
     var brushView = UIViewController()
     var colorView = UIViewController()
     
-    public init() {}
+    init() {}
     
-    public func PPcreatePanel(view: UIView,paintCentralSystem: PaintCentralSystem, paintPanel: PaintPanel) {
+    func PPcreatePanel(view: UIView,paintCentralSystem: PaintCentralSystem, paintPanel: PaintPanel) {
         paintPanel.undoButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.undoButtonTap), for: .touchUpInside)
         paintPanel.redoButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.redoButtonTap), for: .touchUpInside)
         paintPanel.saveButton.addTarget(paintCentralSystem, action: #selector(paintCentralSystem.saveButtonTap), for: .touchUpInside)
@@ -19,7 +19,7 @@ public class PaintSystem {
         view.addSubview(paintPanel)
     }
     
-    public func PPinit(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
+    func PPinit(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
         paintCentralSystem = PaintCentralSystem.init(canvas: canvas, paintPanel: paintPanel)
     }
 }
