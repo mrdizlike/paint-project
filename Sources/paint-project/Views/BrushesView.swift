@@ -1,7 +1,7 @@
 import UIKit
 
 class BrushesView: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var mainView: PaintCentralSystem!
+    var paintCentralSystem: PaintCentralSystem!
     var tools: [DrawProtocol]!
     
     let tableView = UITableView()
@@ -37,25 +37,25 @@ class BrushesView: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     //Создаем заготовленные инструменты
     func initBrushesView() {
-        tools = [Pencil(CGFloat(mainView.brushSize), 1, mainView.colorPickerView.selectedColor),
-                 Brush(CGFloat(mainView.brushSize), 1, mainView.colorPickerView.selectedColor),
-                 Eraser(CGFloat(mainView.brushSize), 1, mainView.drawingFrameView.backgroundColor!),
-                 Marker(CGFloat(mainView.brushSize), 0.2, mainView.colorPickerView.selectedColor)
+        tools = [Pencil(CGFloat(paintCentralSystem.brushSize), 1, paintCentralSystem.colorPickerView.selectedColor),
+                 Brush(CGFloat(paintCentralSystem.brushSize), 1, paintCentralSystem.colorPickerView.selectedColor),
+                 Eraser(CGFloat(paintCentralSystem.brushSize), 1, paintCentralSystem.drawingFrameView.backgroundColor!),
+                 Marker(CGFloat(paintCentralSystem.brushSize), 0.2, paintCentralSystem.colorPickerView.selectedColor)
         ]
     }
     
     //Выбираем нужный инструмент
     func buttonTapped(_ brush: DrawProtocol) {
-        mainView.selectedBrush = tools[brush.id.rawValue]
-        if brush.color != mainView.drawingFrameView.backgroundColor! {
-            mainView.selectedBrush.color = mainView.colorPickerView.selectedColor.withAlphaComponent(brush.opacity)
+        paintCentralSystem.selectedBrush = tools[brush.id.rawValue]
+        if brush.color != paintCentralSystem.drawingFrameView.backgroundColor! {
+            paintCentralSystem.selectedBrush.color = paintCentralSystem.colorPickerView.selectedColor.withAlphaComponent(brush.opacity)
         } else {
-            mainView.selectedBrush.color = brush.color
+            paintCentralSystem.selectedBrush.color = brush.color
         }
-        mainView.selectedBrush.size = CGFloat(mainView.paintPanel.slider.value)
-        mainView.paintPanel.colorButton.isHidden = brush.colorButtonIsHide
+        paintCentralSystem.selectedBrush.size = CGFloat(paintCentralSystem.paintPanel.slider.value)
+        paintCentralSystem.paintPanel.colorButton.isHidden = brush.colorButtonIsHide
         
         dismiss(animated: true)
-        mainView.paintPanel.chooseBrushButton.setImage(UIImage(systemName: mainView.selectedBrush.iconName), for: .normal)
+        paintCentralSystem.paintPanel.chooseBrushButton.setImage(UIImage(systemName: paintCentralSystem.selectedBrush.iconName), for: .normal)
     }
 }

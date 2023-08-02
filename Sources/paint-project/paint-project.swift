@@ -20,6 +20,6 @@ public class PaintSystem {
     }
     
     public func PPinit(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
-        paintCentralSystem = PaintCentralSystem.init(canvas: canvas, mainView: mainView, paintPanel: paintPanel)
+        paintCentralSystem = PaintCentralSystem.init(canvas: canvas, paintPanel: paintPanel)
     }
 }

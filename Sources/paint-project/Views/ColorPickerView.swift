@@ -3,7 +3,7 @@ import UIKit
 
 class ColorPickerView: UIViewController {
     var selectedColor = UIColor.red
-    var mainView: PaintCentralSystem!
+    var paintCentralSystem: PaintCentralSystem!
     var colorButtons: [UIButton]!
     
     var rSlider: UISlider!
@@ -80,8 +80,8 @@ class ColorPickerView: UIViewController {
 
     //Обновляем вид интерфейса под соответсвующий контекст
     func updateButtonState() {
-        mainView.selectedBrush.color = selectedColor.withAlphaComponent(mainView.selectedBrush.opacity)
-        mainView.paintPanel.colorButton.backgroundColor = selectedColor
+        paintCentralSystem.selectedBrush.color = selectedColor.withAlphaComponent(paintCentralSystem.selectedBrush.opacity)
+        paintCentralSystem.paintPanel.colorButton.backgroundColor = selectedColor
         dismiss(animated: true)
     }
     

@@ -12,7 +12,7 @@ public class PaintPanel: UIView {
     let slider = UISlider()
     
     override public init(frame: CGRect) {
-        let customFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: frame.height)
+        let customFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: 300, height: 100)
         let widthRatio = customFrame.width / 300
         let heightRatio = customFrame.height / 100
 

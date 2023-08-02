@@ -3,26 +3,33 @@ import UIKit
 
 public class DrawingView: UIView {
     var history: History! = nil
-    var mainView: PaintCentralSystem!
+    var paintCentralSystem: PaintCentralSystem!
     var paintSystem: PaintSystem!
     var paintPanel: PaintPanel!
     
-    public var uiDelegate: DrawingViewDelegate? { //делегат
-        didSet {
-            if uiDelegate != nil { //если делегат установлен, инициализируем бизнес-логику
-                initPaintSystem()
-            } else {
-                print("uiDelegate not found!")
-            }
-        }
-    }
-    
+    public var uiDelegate: DrawingViewDelegate? //Делегат
     public var showToolPanel = false //Нужна ли нам панель инструментов
     public var tool: DrawProtocol = Pencil(34, 1, .red) //Инструмент который будет по дефолту
     
     var linePaths: [LineSet] = []
     var image: UIImageView!
     private var lastPoint: CGPoint!
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        paintSystem = PaintSystem()
+        paintPanel = PaintPanel()
+        paintSystem.PPinit(canvas: self, mainView: UIViewController(), paintPanel: paintPanel)
+        paintSystem.PPcreatePanel(view: self, paintCentralSystem: paintCentralSystem, paintPanel: paintPanel)
+        paintCentralSystem.selectedBrush = tool
+        history = paintCentralSystem.history
+        paintCentralSystem.paintPanel.chooseBrushButton.setImage(UIImage(systemName: paintCentralSystem.selectedBrush.iconName), for: .normal)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //Отрисовка
     public override func draw(_ rect: CGRect) {
@@ -32,81 +39,61 @@ public class DrawingView: UIView {
         undoRedo()
     }
     
+    // Вызываем panel() после добавления в иерархию представлений
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        panel()
+    }
+    
     //Как только нажимаем на экран, создаем новую линию
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        mainView.selectedBrush.touchesBegan(touches, with: event, self)
-        let newLineSet = LineSet(lines: [mainView.selectedBrush.bezierPath])
+        paintCentralSystem.selectedBrush.touchesBegan(touches, with: event, self)
+        let newLineSet = LineSet(lines: [paintCentralSystem.selectedBrush.bezierPath])
         linePaths.append(newLineSet)
         
         history.redoStack.removeAll()
     }
     
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        mainView.selectedBrush.touchesMoved(touches, with: event, self)
+        paintCentralSystem.selectedBrush.touchesMoved(touches, with: event, self)
     }
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         history.addUndoPath(linePaths.last!)
         
-        mainView.selectedBrush.touchesEnded(touches, with: event, self)
+        paintCentralSystem.selectedBrush.touchesEnded(touches, with: event, self)
         print(linePaths.count)
     }
     
-    //Инициализация системы
-    public func initPaintSystem() {
-        frame = uiDelegate!.presentViewController().view.bounds //фрейм по умолчанию, если не был установлен пользователем
-        paintSystem = PaintSystem()
-        if showToolPanel {
-            paintPanel = PaintPanel(frame: uiDelegate!.rectForToolPanel())
-            paintSystem.PPinit(canvas: self, mainView: uiDelegate!.presentViewController(), paintPanel: paintPanel)
-            paintSystem.PPcreatePanel(view: self, paintCentralSystem: paintSystem.paintCentralSystem, paintPanel: paintPanel)
-        } else {
-            paintPanel = PaintPanel(frame: CGRect(x: 50, y: 50, width: 300, height: 30))
-            paintSystem.PPinit(canvas: self, mainView: uiDelegate!.presentViewController(), paintPanel: paintPanel)
-        }
-        mainView.selectedBrush = tool
-        history = mainView.history
-        mainView.paintPanel.chooseBrushButton.setImage(UIImage(systemName: mainView.selectedBrush.iconName), for: .normal)
-    }
-    
     public func setRect(rect: CGRect) {
-        if uiDelegate != nil {
-            frame = rect
-            image.frame = rect
-        } else {
-            print("uiDelegate not found!")
-        }
+        frame = rect
+        image.frame = rect
     }
     
     public func undo() {
-        if uiDelegate != nil {
-            mainView.undoButtonTap()
-        } else {
-            print("uiDelegate not found!")
-        }
+        paintCentralSystem.undoButtonTap()
     }
     
     public func redo() {
-        if uiDelegate != nil {
-            mainView.redoButtonTap()
-        } else {
-            print("uiDelegate not found!")
-        }
+        paintCentralSystem.redoButtonTap()
     }
     
     public func clean() {
-        if uiDelegate != nil {
-            mainView.cleanButtonTap()
-        } else {
-            print("uiDelegate not found!")
-        }
+        paintCentralSystem.cleanButtonTap()
     }
     
     public func save() {
-        if uiDelegate != nil {
-            mainView.saveButtonTap()
+        paintCentralSystem.saveButtonTap()
+    }
+    
+    //Настраиваем панель инструментов
+    func panel() {
+        if showToolPanel {
+            paintPanel.frame = uiDelegate?.rectForToolPanel() ?? CGRect(x: 50, y: 150, width: 300, height: 100)
+            paintCentralSystem.mainView = uiDelegate?.presentViewController() ?? UIViewController()
+            paintPanel.isHidden = false
         } else {
-            print("uiDelegate not found!")
+            paintPanel.isHidden = true
         }
     }
     
@@ -132,15 +119,15 @@ public class DrawingView: UIView {
     
     func undoRedo() {
         if linePaths.count > 0 {
-            mainView.paintPanel.undoButton.isEnabled = true
+            paintCentralSystem.paintPanel.undoButton.isEnabled = true
         } else {
-            mainView.paintPanel.undoButton.isEnabled = false
+            paintCentralSystem.paintPanel.undoButton.isEnabled = false
         }
         
         if history.redoStack.count > 0 {
-            mainView.paintPanel.redoButton.isEnabled = true
+            paintCentralSystem.paintPanel.redoButton.isEnabled = true
         } else {
-            mainView.paintPanel.redoButton.isEnabled = false
+            paintCentralSystem.paintPanel.redoButton.isEnabled = false
         }
     }
 }

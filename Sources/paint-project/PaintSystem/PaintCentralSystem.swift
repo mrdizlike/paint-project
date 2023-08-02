@@ -15,15 +15,14 @@ public class PaintCentralSystem {
     var brushSize: Float = 34.0
     
     //Инициализация системы
-    public init(canvas: DrawingView, mainView: UIViewController, paintPanel: PaintPanel) {
+    public init(canvas: DrawingView, paintPanel: PaintPanel) {
         drawingFrameView = canvas
-        self.mainView = mainView
         colorPickerView = ColorPickerView()
         brushPickerView = BrushesView()
         self.paintPanel = paintPanel
-        colorPickerView.mainView = self
-        brushPickerView.mainView = self
-        drawingFrameView.mainView = self
+        colorPickerView.paintCentralSystem = self
+        brushPickerView.paintCentralSystem = self
+        drawingFrameView.paintCentralSystem = self
         drawingFrameView.image = UIImageView(frame: drawingFrameView.frame)
         drawingFrameView.addSubview(drawingFrameView.image)
     }
