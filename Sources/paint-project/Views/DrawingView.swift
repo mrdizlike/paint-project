@@ -11,6 +11,8 @@ public class DrawingView: UIView {
         didSet {
             if uiDelegate != nil { //если делегат установлен, инициализируем бизнес-логику
                 initPaintSystem()
+            } else {
+                print("uiDelegate not found!")
             }
         }
     }
