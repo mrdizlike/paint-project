@@ -41,8 +41,10 @@ paintView.redo()
 If you want to clear the screen
 ```swift
 paintView.clean()
+```
 
 Save your masterpiece
 ```swift
 paintView.save()
 ```
+## Enjoy!
