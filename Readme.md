@@ -31,3 +31,18 @@
             return CGRect(x: 50, y: 150, width: 300, height: 100)
         }
 ```
+
+## Additional features
+Access to undo and redo is as follows
+```swift
+paintView.undo() 
+paintView.redo()
+```
+If you want to clear the screen
+```swift
+paintView.clean()
+
+Save your masterpiece
+```swift
+paintView.save()
+```
