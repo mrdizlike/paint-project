@@ -18,7 +18,6 @@
         super.viewDidLoad()
     
         view.addSubview(paintView) //Add paintView to your view
-        paintView.initPaintSystem() //Init system
     }
     
     //Delegate for init
@@ -33,6 +32,12 @@
 ```
 
 ## Additional features
+Set custom canvas frame size
+```swift
+    var rect = CGRect(x: 0, y: 0, width: 200, height: 200)
+    paintView.setRect(rect: rect)
+```
+
 Access to undo and redo is as follows
 ```swift
 paintView.undo() 
